@@ -1,3 +1,5 @@
 # VS Code settings
 .vscode/
 node_modules
+# Angular build & cache outputs
+.angular/
