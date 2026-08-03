@@ -7,6 +7,7 @@ export interface Course {
   title: string;
   maxCapacity: number;
   enrollmentCount: number;
+  credits?: number;
 }
 
 /** Envelope for `GET /api/courses` — TMS API contract list shape (`PagedResponse<T>`). */

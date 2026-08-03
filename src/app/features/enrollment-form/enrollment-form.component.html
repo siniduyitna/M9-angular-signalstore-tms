@@ -1,0 +1,125 @@
+<div class="min-h-screen bg-white p-6 md:p-12 w-full">
+  
+  <!-- Header Title -->
+  <div class="mb-10 max-w-7xl mx-auto">
+    <h1 class="text-2xl font-bold text-slate-900">Course Enrollment</h1>
+  </div>
+
+  <form class="space-y-8 max-w-7xl mx-auto">
+    
+    <!-- Row 1: Student ID & Course ID (50 / 50 Split) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <!-- Student ID -->።
+      <div>
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          Student ID
+        </label>
+        <input 
+          type="text" 
+          placeholder="e.g. STU-1234"
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+        />
+        <p class="text-xs text-red-500 mt-1.5 font-medium">
+          Student ID must be in the format STU-XXXX where XXXX is a 4-digit number.
+        </p>
+      </div>
+
+      <!-- Course ID -->
+      <div>
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          Course ID
+        </label>
+        <input 
+          type="text" 
+          placeholder="e.g. 1"
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+        />
+      </div>
+    </div>
+
+    <!-- Row 2: Term & Notes (50 / 50 Split) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <!-- Term -->
+      <div>
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          Term
+        </label>
+        <input 
+          type="text" 
+          value="Fall 2026" 
+          readonly
+          class="w-full px-4 py-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-sm font-medium cursor-not-allowed"
+        />
+      </div>
+
+      <!-- Notes -->
+      <div>
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          Notes
+        </label>
+        <input 
+          type="text" 
+          placeholder="Optional notes"
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+        />
+      </div>
+    </div>
+
+    <!-- Row 3: Backup Courses (Inline Layout) -->
+    <div class="pt-4">
+      <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+        Backup Courses
+      </label>
+      
+      <div class="flex flex-wrap items-center gap-4">
+        <!-- Backup Course Item 1 -->
+        <div class="flex items-center gap-2">
+          <input 
+            type="text" 
+            placeholder="Backup Course ID"
+            class="w-48 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button type="button" class="text-xs text-red-600 hover:text-red-700 font-semibold px-1">
+            Remove
+          </button>
+        </div>
+
+        <!-- Backup Course Item 2 -->
+        <div class="flex items-center gap-2">
+          <input 
+            type="text" 
+            placeholder="Backup Course ID"
+            class="w-48 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button type="button" class="text-xs text-red-600 hover:text-red-700 font-semibold px-1">
+            Remove
+          </button>
+        </div>
+
+        <!-- Add Backup Course Button -->
+        <button 
+          type="button" 
+          class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-sm">
+          Add Backup Course
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Action Buttons (Bottom Right Aligned) -->
+    <div class="pt-12 flex items-center justify-end gap-4">
+      <button 
+        type="button" 
+        class="px-6 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors">
+        Cancel
+      </button>
+      
+      <button 
+        type="submit" 
+        class="px-7 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all duration-150 active:scale-95">
+        Confirm Enrollment
+      </button>
+    </div>
+
+  </form>
+
+</div>

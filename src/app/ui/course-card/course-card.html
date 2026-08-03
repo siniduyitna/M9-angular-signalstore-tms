@@ -1,21 +1,37 @@
-<div class="card">
-  <h3>
-    <a [routerLink]="['/courses', course().id]">{{ course().title }}</a>
-    ({{ course().code }})
-  </h3>
-  <p>
-    Enrolled {{ course().enrollmentCount }} of {{ course().maxCapacity }} seats
-  </p>
-  <span
-    class="badge"
-    [class.closed]="course().enrollmentCount >= course().maxCapacity"
-  >
-    {{ course().enrollmentCount >= course().maxCapacity ? "Full" : "Accepting enrollments" }}
-  </span>
-  <button
-    (click)="enrollClicked.emit(course())"
-    [disabled]="course().enrollmentCount >= course().maxCapacity"
-  >
-    Enroll
-  </button>
+<div class="h-full flex flex-col justify-between bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+  <div>
+    <!-- Title & Code -->
+    <div class="flex items-start justify-between gap-2 mb-3">
+      <h3 class="font-semibold text-slate-800 hover:text-indigo-600 transition-colors">
+        <a [routerLink]="['/courses', course().id]" class="hover:underline">
+          {{ course().title }}
+        </a>
+      </h3>
+      <span class="shrink-0 bg-slate-100 text-slate-600 font-mono text-xs font-semibold px-2.5 py-1 rounded-md">
+        {{ course().code }}
+      </span>
+    </div>
+
+    <!-- Status -->
+    <div class="text-xs mb-4">
+      <span class="text-slate-400">Status: </span>
+      @if (isEnrolled()) {
+        <span class="inline-flex items-center gap-1 font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+          Enrolled ✅
+        </span>
+      } @else {
+        <span class="font-medium text-slate-600">Accepting enrollments</span>
+      }
+    </div>
+  </div>
+
+  <!-- Enroll Button -->
+  <div class="pt-3 border-t border-slate-100">
+    <button 
+      (click)="onEnroll()" 
+      [disabled]="isEnrolled()"
+      class="w-full py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95 disabled:pointer-events-none disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm hover:shadow-indigo-100">
+      {{ isEnrolled() ? 'Enrolled' : 'Enroll' }}
+    </button>
+  </div>
 </div>

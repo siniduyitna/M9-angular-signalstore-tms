@@ -1,62 +1,53 @@
-import { Component, signal, computed } from "@angular/core";
-// .component የሚለውን ከ Pathው ላይ አስወግደው
-import { CourseCardComponent } from "../../ui/course-card/course-card"; 
-import { Course } from "../../models/course.model";
+import { Component, signal, computed, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { CourseCardComponent } from '../../ui/course-card/course-card';
+import { Course } from '../../models/course.model';
+import { CourseService } from '../../services/course.service';
 
 @Component({
-  selector: "app-student-dashboard",
+  selector: 'app-student-dashboard',
   standalone: true,
   imports: [CourseCardComponent],
-  templateUrl: "./student-dashboard.component.html",
-  styleUrl: "./student-dashboard.component.scss",
+  templateUrl: './student-dashboard.component.html',
+  styleUrl: './student-dashboard.component.scss'
 })
 export class StudentDashboardComponent {
-  studentName = signal("Liya Kebede");
+  private api = inject(CourseService);
+
+  studentName = signal('Liya Kebede');
   earnedCredits = signal(45);
 
-  selectedCourse = signal<Course | null>(null);
-
-  availableCourses = signal<Course[]>([
-    {
-      id: 1,
-      title: "Advanced Java Services",
-      code: "CSE-101",
-      maxCapacity: 30,
-      enrollmentCount: 10,
-    },
-    {
-      id: 2,
-      title: "Angular UI Lab",
-      code: "CSE-210",
-      maxCapacity: 25,
-      enrollmentCount: 25,
-    },
-    {
-      id: 3,
-      title: "Database Design",
-      code: "CSE-305",
-      maxCapacity: 20,
-      enrollmentCount: 18,
-    },
-    {
-      id: 4,
-      title: "API Security Workshop",
-      code: "CSE-420",
-      maxCapacity: 40,
-      enrollmentCount: 15,
-    },
-  ]);
+  // 1. የተመዘገቡ ኮርሶችን ID ለመያዝ Set/Array number
+  enrolledCourseIds = signal<Set<number>>(new Set());
 
   graduationStatus = computed(() =>
-    this.earnedCredits() >= 120 ? "Eligible for Graduation" : "In Progress"
+    this.earnedCredits() >= 120 ? 'Eligible for Graduation' : 'In Progress'
   );
+
+  // rxResource automatic status control
+  coursesResource = rxResource({
+    stream: () => this.api.getAll(),
+  });
 
   registerForClass() {
     this.earnedCredits.update((c) => c + 3);
   }
 
+  // 2. handleEnroll ሲነካ logic-ኡ ይፈጸማል
   handleEnroll(course: Course) {
-    this.selectedCourse.set(course);
-    console.log("Enrollment requested for:", course.title);
-  }
+    // ቀድሞ ከተመዘገበ ደግሞ እንዳይመዘገብ መከልከል
+    if (this.enrolledCourseIds().has(course.id)) return;
+
+    // ሀ) የተመዘገበበትን ኮርስ ID መመዝገብ
+    this.enrolledCourseIds.update((ids) => {
+      const updated = new Set(ids);
+      updated.add(course.id);
+      return updated;
+    });
+
+    // ለ) የተማሪውን Credit በ 3 (ወይም በኮርሱ
+    this.earnedCredits.update((c) => c + 3);
+
+  console.log('Successfully enrolled in:', course.title);
+}
 }
