@@ -1,0 +1,49 @@
+<div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-200">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-slate-800">Enrollment Approvals</h2>
+    <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full">
+      Pending: {{ store.pendingCount() }}
+    </span>
+  </div>
+
+  @if (store.isLoading()) {
+    <p class="text-sm text-slate-500 py-4">Loading enrollments...</p>
+  }
+
+  <div class="space-y-3">
+    @for (enrollment of store.entities(); track enrollment.id) {
+      <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+        <div>
+          <p class="text-sm font-semibold text-slate-800">{{ enrollment.studentName }}</p>
+          <p class="text-xs text-slate-500">{{ enrollment.courseName || 'Course #' + enrollment.courseId }}</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-md"
+            [class.bg-amber-100]="enrollment.status === 'Pending'"
+            [class.text-amber-700]="enrollment.status === 'Pending'"
+            [class.bg-emerald-100]="enrollment.status === 'Approved'"
+            [class.text-emerald-700]="enrollment.status === 'Approved'">
+            {{ enrollment.status }}
+          </span>
+
+          @if (enrollment.status === 'Pending') {
+            <button 
+              (click)="onApprove(enrollment.id)"
+              class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition-all cursor-pointer">
+              Approve
+            </button>
+          }
+        </div>
+      </div>
+    } @empty {
+      @if (!store.isLoading()) {
+        <p class="text-xs text-slate-400 italic py-2 text-center">No enrollments pending approval.</p>
+      }
+    }
+  </div>
+
+  @if (store.error()) {
+    <p class="mt-4 text-xs text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{{ store.error() }}</p>
+  }
+</div>
