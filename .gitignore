@@ -1,5 +1,19 @@
-# VS Code settings
-.vscode/
-node_modules
-# Angular build & cache outputs
+# Dependencies (በጣም ከባድ ስለሆኑ በፍጹም መግባት የለባቸውም)
+node_modules/
+
+# Angular Build Outputs
+dist/
 .angular/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
