@@ -16,4 +16,4 @@ dist/
 Thumbs.db
 
 # Environment variables
-.env
+.envgit push origin session-1-signalstore

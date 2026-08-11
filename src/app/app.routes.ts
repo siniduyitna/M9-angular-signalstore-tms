@@ -9,6 +9,20 @@ export const routes: Routes = [
   { path: 'courses/:id', component: CourseDetailComponent },
   { path: 'enrollments', component: EnrollmentListComponent },
   
+  // 👈 አዲስ የተጨመረው Instructor Dashboard Route (Lazy Loaded)
+  {
+    path: 'instructor',
+    loadComponent: () =>
+      import('./features/instructor-dashboard/instructor-dashboard.component').then(
+        (m) => m.InstructorDashboardComponent
+      ),
+  },
+    {
+  path: 'grade-submission',
+  loadComponent: () =>
+    import('./features/grade-submission/grade-submission.component')
+      .then(m => m.GradeSubmissionComponent)
+},
   {
     path: 'enroll',
     loadComponent: () =>

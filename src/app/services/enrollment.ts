@@ -18,7 +18,7 @@ export class EnrollmentService {
       map((enrollments) =>
         enrollments.map((e) => ({
           ...e,
-          status: e.status || 'Pending', // 👈 status ከሌለው 'Pending' ያደርገዋል
+          status: e.status || 'Pending', //  status ከሌለው 'Pending' ያደርገዋል
         }))
       )
     );

@@ -1,1 +1,15 @@
 <router-outlet />
+<router-outlet></router-outlet>
+
+<div style="padding: 20px;">
+  <!-- 1. Dashboard Summary Widget (ተጠባባቂ ቁጥሩን ብቻ የሚያሳይ) -->
+  <div style="background: #f0f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <h3>Dashboard Summary Widget</h3>
+    <p style="font-size: 1.2rem; font-weight: bold;">
+      Pending Enrollments: {{ store.pendingCount() }}
+    </p>
+  </div>
+
+  <!-- 2. Enrollment List Component (የዝርዝር ማሳያው) -->
+  <tms-enrollment-list></tms-enrollment-list>
+</div>

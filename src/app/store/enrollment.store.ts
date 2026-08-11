@@ -12,8 +12,9 @@ import {
   updateEntity,
 } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, concatMap, tap, catchError, EMPTY } from 'rxjs';
+import { pipe, concatMap, tap, catchError, EMPTY, switchMap } from 'rxjs';
 import { EnrollmentService } from '../services/enrollment';
+import { LiveSyncService } from '../services/live-sync'; // 👈 LiveSyncService import ተደርጓል
 import { Enrollment } from '../models/enrollment.model';
 
 export const EnrollmentStore = signalStore(
@@ -25,12 +26,32 @@ export const EnrollmentStore = signalStore(
       () => store.entities().filter((e) => e.status === 'Pending').length
     ),
   })),
-  withMethods((store, api = inject(EnrollmentService)) => ({
+  withMethods((
+    store,
+    api = inject(EnrollmentService),
+    sync = inject(LiveSyncService) // 👈 LiveSyncService inject ተደርጓል
+  ) => ({
+    // 🔴 SignalR Real-Time Event Listener
+    listenForLiveUpdates: rxMethod<void>(
+      pipe(
+        tap(() => sync.connect()),
+        switchMap(() => sync.events$),
+        tap((event) => {
+          patchState(
+            store,
+            updateEntity({
+              id: Number(event.id), // ID-ው string ከሆነ ወደ number መቀየሩን ያረጋግጣል
+              changes: { status: event.status },
+            })
+          );
+        })
+      )
+    ),
+
     loadEnrollments: rxMethod<number | void>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
         concatMap((courseId) =>
-          // courseId ካልተሰጠ default 1 ያደርገዋል
           api.getAll(typeof courseId === 'number' ? courseId : 1).pipe(
             tap((rows) =>
               patchState(store, setAllEntities(rows), { isLoading: false })
@@ -43,7 +64,8 @@ export const EnrollmentStore = signalStore(
         )
       )
     ),
-    approveEnrollment: rxMethod<number>( //  id type string ወደ number ተቀይሯል
+
+    approveEnrollment: rxMethod<number>(
       pipe(
         tap((id) => {
           // Optimistic update

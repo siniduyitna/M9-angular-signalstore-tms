@@ -1,4 +1,5 @@
-<div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-200">
+<div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-200 space-y-4">
+  <!-- Header Section -->
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-lg font-bold text-slate-800">Enrollment Approvals</h2>
     <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full">
@@ -10,37 +11,60 @@
     <p class="text-sm text-slate-500 py-4">Loading enrollments...</p>
   }
 
-  <div class="space-y-3">
-    @for (enrollment of store.entities(); track enrollment.id) {
-      <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-        <div>
-          <p class="text-sm font-semibold text-slate-800">{{ enrollment.studentName }}</p>
-          <p class="text-xs text-slate-500">{{ enrollment.courseName || 'Course #' + enrollment.courseId }}</p>
-        </div>
+  <!-- Enterprise MatTable Data Grid -->
+  <div class="overflow-x-auto rounded-xl border border-slate-200">
+    <table mat-table [dataSource]="dataSource" matSort class="w-full">
+      
+      <!-- Student Column -->
+      <ng-container matColumnDef="studentName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold"> Student </th>
+        <td mat-cell *matCellDef="let row" class="text-slate-800 font-medium"> {{ row.studentName }} </td>
+      </ng-container>
 
-        <div class="flex items-center gap-3">
+      <!-- Course Column -->
+      <ng-container matColumnDef="courseName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold"> Course </th>
+        <td mat-cell *matCellDef="let row" class="text-slate-500"> {{ row.courseName || 'Course #' + row.courseId }} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold"> Status </th>
+        <td mat-cell *matCellDef="let row">
           <span class="text-xs font-semibold px-2.5 py-1 rounded-md"
-            [class.bg-amber-100]="enrollment.status === 'Pending'"
-            [class.text-amber-700]="enrollment.status === 'Pending'"
-            [class.bg-emerald-100]="enrollment.status === 'Approved'"
-            [class.text-emerald-700]="enrollment.status === 'Approved'">
-            {{ enrollment.status }}
+            [class.bg-amber-100]="row.status === 'Pending'"
+            [class.text-amber-700]="row.status === 'Pending'"
+            [class.bg-emerald-100]="row.status === 'Approved'"
+            [class.text-emerald-700]="row.status === 'Approved'">
+            {{ row.status }}
           </span>
+        </td>
+      </ng-container>
 
-          @if (enrollment.status === 'Pending') {
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="text-slate-700 font-semibold"> Actions </th>
+        <td mat-cell *matCellDef="let row">
+          @if (row.status === 'Pending') {
             <button 
-              (click)="onApprove(enrollment.id)"
+              (click)="onApprove(row.id)"
               class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition-all cursor-pointer">
               Approve
             </button>
           }
-        </div>
-      </div>
-    } @empty {
-      @if (!store.isLoading()) {
-        <p class="text-xs text-slate-400 italic py-2 text-center">No enrollments pending approval.</p>
-      }
-    }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-slate-50/50 transition-colors"></tr>
+    </table>
+
+    <!-- Pagination -->
+    <mat-paginator
+      [pageSizeOptions]="[10, 25, 50]"
+      showFirstLastButtons
+      class="border-t border-slate-100">
+    </mat-paginator>
   </div>
 
   @if (store.error()) {

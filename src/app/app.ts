@@ -1,12 +1,21 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { EnrollmentStore } from './store/enrollment.store';
+import { EnrollmentListComponent } from './features/enrollment-list/enrollment-list.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, EnrollmentListComponent], // HTML ላይ <router-outlet> ካለህ እንደነበረ ይቆያል
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+styleUrl: './app.scss'
 })
-export class App {
-  protected readonly title = signal('tms-client');
+export class AppComponent {
+  title = 'tms-client';
+  store = inject(EnrollmentStore);
+  ngOnInit() {
+    // የመጀመርያ መረጃዎችን ይጭናል እንዲሁም የ SignalR አየር ላይ ግንኙነቱን ያስነሳል
+    this.store.listenForLiveUpdates();
+  }
+ 
 }
